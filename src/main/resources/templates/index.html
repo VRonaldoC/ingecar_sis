@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>INGECAR - Panel de Control</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/clientes" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <!-- Encabezado del panel -->
+            <div class="welcome-card">
+                <div class="welcome-content">
+                    <h2 class="welcome-title">Panel de Control</h2>
+                    <p class="welcome-subtitle">Bienvenido al sistema de gestión de órdenes de servicio</p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3>[[${usuario.nombreCompleto}]]</h3>
+                        <span class="user-role">[[${usuario.rol}]]</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estadísticas principales -->
+            <div class="stats-grid">
+                <div class="stat-card clients-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">[[${totalClientes}]]</h3>
+                        <p class="stat-title">Clientes Registrados</p>
+                        <a href="/clientes" class="stat-action">
+                            Ver todos <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="card-bg-img">
+                        <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Clientes">
+                    </div>
+                </div>
+
+                <div class="stat-card pending-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">[[${ordenesPendientes}]]</h3>
+                        <p class="stat-title">Órdenes Pendientes</p>
+                        <a href="/ordenes" class="stat-action">
+                            Gestionar <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="card-bg-img">
+                        <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Pendientes">
+                    </div>
+                </div>
+
+                <div class="stat-card process-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">[[${ordenesEnProceso}]]</h3>
+                        <p class="stat-title">En Proceso</p>
+                        <p class="stat-desc">En taller actualmente</p>
+                    </div>
+                    <div class="card-bg-img">
+                        <img src="https://images.unsplash.com/photo-1565689221354-d87f85d4aee2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="En Proceso">
+                    </div>
+                </div>
+
+                <div class="stat-card completed-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number">[[${ordenesCompletadas}]]</h3>
+                        <p class="stat-title">Órdenes Completadas</p>
+                        <p class="stat-desc">Este mes</p>
+                    </div>
+                    <div class="card-bg-img">
+                        <img src="https://images.unsplash.com/photo-1603575448878-868a20723f5d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Completadas">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones rápidas -->
+            <div class="quick-actions">
+                <h3 class="section-title">Acciones Rápidas</h3>
+                <div class="actions-grid">
+                    <a href="/ordenes/nueva" class="action-card">
+                        <div class="action-icon new-order">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                        <h4>Nueva Orden</h4>
+                        <p>Crear nueva orden de servicio</p>
+                    </a>
+                    
+                    <a href="/clientes/nuevo" class="action-card">
+                        <div class="action-icon new-client">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h4>Nuevo Cliente</h4>
+                        <p>Registrar nuevo cliente</p>
+                    </a>
+                    
+                    <a href="/reportes" class="action-card">
+                        <div class="action-icon reports">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </div>
+                        <h4>Generar Reporte</h4>
+                        <p>Reportes financieros</p>
+                    </a>
+                    
+                    <a href="/catalogos" class="action-card">
+                        <div class="action-icon services">
+                            <i class="fas fa-concierge-bell"></i>
+                        </div>
+                        <h4>Servicios</h4>
+                        <p>Gestionar catálogo</p>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Pie de página del dashboard -->
+            <div class="dashboard-footer">
+                <div class="footer-stats">
+                    <div class="footer-stat">
+                        <i class="fas fa-car"></i>
+                        <span>Sistema activo</span>
+                    </div>
+                    <div class="footer-stat">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Seguro</span>
+                    </div>
+                    <div class="footer-stat">
+                        <i class="fas fa-bolt"></i>
+                        <span>Rápido</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

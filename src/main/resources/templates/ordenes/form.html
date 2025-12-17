@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nueva Orden - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/ordenes-form.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="/clientes" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link active">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="page-header">
+            <div class="page-title">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h2>Nueva Orden de Servicio</h2>
+            </div>
+            <a th:href="@{/clientes/detalle/{dni}(dni=${orden.cliente.dni})}" class="btn-back">
+                <i class="fas fa-arrow-left"></i>
+                Volver al Cliente
+            </a>
+        </div>
+
+        <div class="form-card">
+            <div class="form-header">
+                <h3><i class="fas fa-car"></i> Información del Vehículo</h3>
+            </div>
+            
+            <div class="vehicle-summary">
+                <div class="vehicle-plate">
+                    <i class="fas fa-car-side"></i>
+                    [[${orden.vehiculo.placa}]]
+                </div>
+                <p><strong>[[${orden.vehiculo.marca}]] [[${orden.vehiculo.modelo}]]</strong> - [[${orden.vehiculo.anio}]] - [[${orden.vehiculo.color}]]</p>
+                <div class="customer-info">
+                    <i class="fas fa-user"></i>
+                    <span>[[${orden.cliente.nombreCompleto}]] (DNI: [[${orden.cliente.dni}]])</span>
+                </div>
+            </div>
+
+            <form th:action="@{/ordenes/guardar}" method="post" th:object="${orden}">
+                <input type="hidden" th:field="*{idOrden}">
+                <input type="hidden" th:field="*{vehiculo.idVehiculo}">
+                <input type="hidden" th:field="*{cliente.idCliente}">
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-stethoscope"></i>
+                        Diagnóstico Inicial
+                    </label>
+                    <textarea th:field="*{diagnostico}" class="form-control" rows="4" 
+                              placeholder="Describa el problema o servicio requerido..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-tools"></i>
+                        Servicios a Realizar
+                    </label>
+                    <div class="services-grid">
+                        <div th:each="s : ${servicios}" class="service-item">
+                            <input type="checkbox" name="serviciosSeleccionados" 
+                                   th:value="${s.idServicio}" 
+                                   th:id="'serv' + ${s.idServicio}">
+                            <label th:for="'serv' + ${s.idServicio}">
+                                <strong>[[${s.nombreServicio}]]</strong><br>
+                                <span class="service-price">S/ [[${s.precioReferencial}]]</span>
+                                <small>[[${s.tiempoEstimadoHoras}]] horas</small>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:1rem;margin:1.5rem 0;">
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">
+                            <i class="fas fa-user-tie"></i>
+                            Recepcionista
+                        </label>
+                        <select th:field="*{usuarioRecepcion.idUsuario}" class="form-control">
+                            <option value="0">-- Sin recepcionista --</option>
+                            <option th:each="r : ${recepcionistas}" 
+                                    th:value="${r.idUsuario}" 
+                                    th:text="${r.nombreCompleto}"></option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" style="flex:1;">
+                        <label class="form-label">
+                            <i class="fas fa-tools"></i>
+                            Técnico Asignado
+                        </label>
+                        <select th:field="*{tecnicoAsignado.idUsuario}" class="form-control">
+                            <option value="0">-- Sin técnico --</option>
+                            <option th:each="t : ${tecnicos}" 
+                                    th:value="${t.idUsuario}" 
+                                    th:text="${t.nombreCompleto}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i>
+                        Guardar Orden
+                    </button>
+                    <a th:href="@{/clientes/detalle/{dni}(dni=${orden.cliente.dni})}" class="btn-cancel">
+                        <i class="fas fa-times"></i>
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${usuario.idUsuario} ? 'Editar Usuario' : 'Nuevo Usuario'">Usuario - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/usuarios-form.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="/clientes" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link active">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <div class="page-icon">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <h1 th:text="${usuario.idUsuario} ? 'Editar Usuario' : 'Nuevo Usuario'"></h1>
+                </div>
+                <a href="/usuarios" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver a Usuarios
+                </a>
+            </div>
+            
+            <div class="form-card">
+                <form th:action="@{/usuarios/guardar}" method="post" th:object="${usuario}">
+                    <input type="hidden" th:field="*{idUsuario}">
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-user-circle"></i>
+                            Información de Acceso
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i>
+                                    Nombre de Usuario
+                                </label>
+                                <input type="text" th:field="*{nombreUsuario}" class="form-control" required 
+                                       placeholder="Ingresa el nombre de usuario">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-lock"></i>
+                                    Contraseña
+                                </label>
+                                <div class="password-field">
+                                    <input type="password" th:field="*{contraseña}" class="form-control" required 
+                                           placeholder="Ingresa la contraseña">
+                                    <button type="button" class="password-toggle">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-id-card"></i>
+                            Información Personal
+                        </h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-signature"></i>
+                                    Nombre Completo
+                                </label>
+                                <input type="text" th:field="*{nombreCompleto}" class="form-control" required 
+                                       placeholder="Nombre completo del usuario">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope"></i>
+                                    Email
+                                </label>
+                                <input type="email" th:field="*{email}" class="form-control" 
+                                       placeholder="correo@ejemplo.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-phone"></i>
+                                    Teléfono
+                                </label>
+                                <input type="text" th:field="*{telefono}" class="form-control" 
+                                       placeholder="Número de teléfono">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-user-tag"></i>
+                            Rol del Usuario
+                        </h3>
+                        <div class="role-options">
+                            <label class="role-card" th:classappend="${usuario.rol == 'administrador'} ? 'selected' : ''">
+                                <input type="radio" th:field="*{rol}" value="administrador" hidden>
+                                <div class="role-icon">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <div class="role-name">Administrador</div>
+                                <small>Acceso completo</small>
+                            </label>
+                            
+                            <label class="role-card" th:classappend="${usuario.rol == 'tecnico'} ? 'selected' : ''">
+                                <input type="radio" th:field="*{rol}" value="tecnico" hidden>
+                                <div class="role-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div class="role-name">Técnico</div>
+                                <small>Taller y órdenes</small>
+                            </label>
+                            
+                            <label class="role-card" th:classappend="${usuario.rol == 'recepcionista'} ? 'selected' : ''">
+                                <input type="radio" th:field="*{rol}" value="recepcionista" hidden>
+                                <div class="role-icon">
+                                    <i class="fas fa-headset"></i>
+                                </div>
+                                <div class="role-name">Recepcionista</div>
+                                <small>Clientes y citas</small>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-toggle-on"></i>
+                            Estado del Usuario
+                        </h3>
+                        <div class="status-indicators">
+                            <label class="status-indicator" th:classappend="${usuario.estado == 'activo'} ? 'selected' : ''">
+                                <input type="radio" th:field="*{estado}" value="activo" hidden>
+                                <span class="status-dot active"></span>
+                                <span>Activo</span>
+                            </label>
+                            
+                            <label class="status-indicator inactive" th:classappend="${usuario.estado == 'inactivo'} ? 'selected' : ''">
+                                <input type="radio" th:field="*{estado}" value="inactivo" hidden>
+                                <span class="status-dot inactive"></span>
+                                <span>Inactivo</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Guardar Usuario
+                        </button>
+                        <a href="/usuarios" class="btn btn-secondary">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle password visibility
+        document.querySelectorAll('.password-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        });
+
+        // Role card selection
+        document.querySelectorAll('.role-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                // Update visual selection
+                document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Status indicator selection
+        document.querySelectorAll('.status-indicator').forEach(indicator => {
+            indicator.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                
+                // Update visual selection
+                document.querySelectorAll('.status-indicator').forEach(i => {
+                    i.classList.remove('selected');
+                    i.classList.remove('inactive');
+                });
+                this.classList.add('selected');
+                if (this.querySelector('input[type="radio"]').value === 'inactivo') {
+                    this.classList.add('inactive');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

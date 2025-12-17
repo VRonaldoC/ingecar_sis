@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>[[${cliente.nombreCompleto}]] - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/clientes-detalle.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a th:href="@{/}" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a th:href="@{/clientes}" class="nav-link active">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a th:href="@{/ordenes}" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a th:href="@{/catalogos}" class="nav-link">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a th:href="@{/reportes}" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a th:href="@{/usuarios}" class="nav-link">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a th:href="@{/auth/logout}" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="page-header">
+                <div class="breadcrumb">
+                    <a th:href="@{/clientes}" class="breadcrumb-link">
+                        <i class="fas fa-arrow-left"></i>
+                        Volver a Clientes
+                    </a>
+                </div>
+                <div class="page-title">
+                    <div class="client-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="title-content">
+                        <h2>[[${cliente.nombreCompleto}]]</h2>
+                        <p class="client-subtitle">Cliente #[[${cliente.idCliente}]]</p>
+                    </div>
+                </div>
+                <div class="page-actions">
+                    <a th:href="@{/clientes/editar/{id}(id=${cliente.idCliente})}" class="btn-action edit-btn">
+                        <i class="fas fa-edit"></i>
+                        Editar Cliente
+                    </a>
+                    <a th:href="@{/clientes/eliminar/{id}(id=${cliente.idCliente})}" 
+                       class="btn-action delete-btn"
+                       onclick="return confirm('¿Está seguro de eliminar este cliente?');">
+                        <i class="fas fa-trash-alt"></i>
+                        Eliminar
+                    </a>
+                </div>
+            </div>
+
+            <div class="client-dashboard">
+                <!-- Información del cliente -->
+                <div class="info-section">
+                    <div class="info-card">
+                        <div class="info-header">
+                            <h3><i class="fas fa-id-card"></i> Información Personal</h3>
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-id-badge"></i>
+                                    DNI
+                                </div>
+                                <div class="info-value">[[${cliente.dni}]]</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-phone"></i>
+                                    Teléfono
+                                </div>
+                                <div class="info-value">[[${cliente.telefono}]]</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-envelope"></i>
+                                    Email
+                                </div>
+                                <div class="info-value">[[${cliente.email}]]</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Dirección
+                                </div>
+                                <div class="info-value">[[${cliente.direccion}]]</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-toggle-on"></i>
+                                    Estado
+                                </div>
+                                <div class="info-value">
+                                    <span th:classappend="${cliente.estado == 'activo'} ? 'status-active' : 'status-inactive'">
+                                        [[${cliente.estado}]]
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estadísticas rápidas -->
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <h3><i class="fas fa-chart-bar"></i> Estadísticas</h3>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-car"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">[[${totalVehiculos}]]</div>
+                                    <div class="stat-label">Vehículos</div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">[[${totalOrdenes}]]</div>
+                                    <div class="stat-label">Órdenes</div>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">[[${ordenesCompletadas}]]</div>
+                                    <div class="stat-label">Completadas</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehículos del cliente -->
+                <div class="vehicles-section">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <i class="fas fa-car"></i>
+                            <h3>Vehículos Registrados</h3>
+                        </div>
+                        <div class="section-actions">
+                            <a th:href="@{/vehiculos/nuevo/{dni}(dni=${cliente.dni})}" class="btn-new">
+                                <i class="fas fa-plus"></i>
+                                Agregar Vehículo
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="section-content">
+                        <div th:if="${!vehiculos.empty}" class="vehicles-list">
+                            <div class="vehicles-grid">
+                                <div class="vehicle-card" th:each="v : ${vehiculos}">
+                                    <div class="card-header">
+                                        <div class="vehicle-icon">
+                                            <i class="fas fa-car-side"></i>
+                                        </div>
+                                        <div class="vehicle-info">
+                                            <div class="vehicle-plate">
+                                                <strong>Placa:</strong> [[${v.placa}]]
+                                            </div>
+                                            <div class="vehicle-model">
+                                                [[${v.marca}]] [[${v.modelo}]]
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body">
+                                        <div class="vehicle-details">
+                                            <div class="detail-item">
+                                                <span class="detail-label">
+                                                    <i class="fas fa-calendar-alt"></i> Año:
+                                                </span>
+                                                <span class="detail-value">[[${v.anio}]]</span>
+                                            </div>
+                                            <div class="detail-item">
+                                                <span class="detail-label">
+                                                    <i class="fas fa-palette"></i> Color:
+                                                </span>
+                                                <span class="detail-value">[[${v.color}]]</span>
+                                            </div>
+                                            <div class="detail-item">
+                                                <span class="detail-label">
+                                                    <i class="fas fa-tachometer-alt"></i> Kilometraje:
+                                                </span>
+                                                <span class="detail-value">[[${v.kilometraje}]] km</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-footer">
+                                        <div class="vehicle-actions">
+                                            <!-- ENLACE CORREGIDO: Usa placa -->
+                                            <a th:href="@{/ordenes/nueva/{placa}(placa=${v.placa})}" class="primary-btn">
+                                                <i class="fas fa-plus-circle"></i>
+                                                Nueva Orden
+                                            </a>
+                                            
+                                            <a th:href="@{/vehiculos/detalle/{id}(id=${v.idVehiculo})}" class="details-btn">
+                                                <i class="fas fa-eye"></i>
+                                                Ver Detalles
+                                            </a>
+                                            
+                                            <div class="action-buttons">
+                                                <a th:href="@{/vehiculos/editar/{id}(id=${v.idVehiculo})}" class="btn-action edit-btn">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a th:href="@{/vehiculos/eliminar/{id}(id=${v.idVehiculo})}" 
+                                                   class="btn-action delete-btn"
+                                                   onclick="return confirm('¿Eliminar este vehículo?');">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div th:if="${vehiculos.empty}" class="no-vehicles">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-car fa-3x"></i>
+                                </div>
+                                <h4>No hay vehículos registrados</h4>
+                                <p>Este cliente no tiene vehículos registrados en el sistema.</p>
+                                <a th:href="@{/vehiculos/nuevo/{dni}(dni=${cliente.dni})}" class="btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    Agregar Primer Vehículo
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Órdenes recientes -->
+                <div class="orders-section" th:if="${!ordenesRecientes.empty}">
+                    <div class="section-header">
+                        <h3><i class="fas fa-history"></i> Órdenes Recientes</h3>
+                        <a th:href="@{/ordenes/cliente/{dni}(dni=${cliente.dni})}" class="btn-view-all">
+                            Ver todas
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="orders-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Orden #</th>
+                                    <th>Vehículo</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Total</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="o : ${ordenesRecientes}">
+                                    <td class="order-id">#[[${o.idOrden}]]</td>
+                                    <td class="order-vehicle">[[${o.vehiculo.placa}]]</td>
+                                    <td class="order-date">[[${o.fechaRegistro}]]</td>
+                                    <td class="order-status">
+                                        <span th:classappend="${o.estado}">
+                                            [[${o.estado}]]
+                                        </span>
+                                    </td>
+                                    <td class="order-total">S/ [[${o.total}]]</td>
+                                    <td class="order-actions">
+                                        <a th:href="@{/ordenes/detalle/{id}(id=${o.idOrden})}" class="btn-sm view-btn">
+                                            <i class="fas fa-eye"></i>
+                                            Ver
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const vehicleCards = document.querySelectorAll('.vehicle-card');
+            vehicleCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>

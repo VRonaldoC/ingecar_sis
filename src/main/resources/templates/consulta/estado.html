@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Consultar Estado - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/consulta-estado.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header>
+        <h1>Taller Automotriz INGECAR</h1>
+        <nav>
+            <a href="/consulta">← Volver al Inicio</a>
+            <a href="/auth/login">Acceso Personal</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2 class="card-title">Consultar Estado del Vehículo</h2>
+            <p class="system-description">Ingresa la placa de tu vehículo para ver el estado actual del servicio</p>
+            
+            <form th:action="@{/consulta/buscar}" method="post">
+                <div class="form-group">
+                    <label class="form-label">Placa del Vehículo</label>
+                    <input type="text" name="placa" class="form-control" required placeholder="Ej: ABC-123">
+                </div>
+                <button type="submit" class="btn">Consultar Estado</button>
+            </form>
+            
+            <div th:if="${error}" class="alert alert-error mt-2">
+                [[${error}]]
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Taller INGECAR &copy; 2023 | Tel: 921230909</p>
+    </footer>
+</body>
+</html>

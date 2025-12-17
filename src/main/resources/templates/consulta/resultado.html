@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Factura de Servicio - INGECAR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/consulta-resultado.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header class="consulta-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <h1>Taller INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/consulta" class="nav-link">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Volver</span>
+                </a>
+                <a href="/auth/login" class="nav-link logout">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Inicio Sistema</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+    <div class="main-content">
+        <div class="container">
+            <div class="invoice-container" th:if="${orden != null}">
+                <div class="invoice-header">
+                    <div class="company-info">
+                        <h1><i class="fas fa-wrench"></i> TALLER MECATRÓNICA INGECAR</h1>
+                        <p class="company-subtitle">(Quenaya) - Especialistas Automotrices</p>
+                        <div class="company-details">
+                            <p><strong><i class="fas fa-map-marker-alt"></i> Dirección:</strong> AV. Huancane, Juliaca - Puno, Perú</p>
+                            <p><strong><i class="fas fa-id-card"></i> RUC:</strong> 20609924871</p>
+                            <p><strong><i class="fas fa-phone"></i> Teléfono:</strong> 921230909</p>
+                            <p><strong><i class="fas fa-envelope"></i> Email:</strong> ingecar@gmail.com</p>
+                            <p><strong><i class="fas fa-industry"></i> Sector:</strong> Servicios de mantenimiento y reparación automotriz</p>
+                        </div>
+                    </div>
+                    
+                    <div class="invoice-info">
+                        <div class="invoice-title">
+                            <h2><i class="fas fa-file-invoice"></i> FACTURA DE SERVICIO</h2>
+                            <div class="invoice-number">
+                                <span class="invoice-label">ORDEN #</span>
+                                <span class="invoice-value">[[${orden?.idOrden}]]</span>
+                            </div>
+                        </div>
+                        <div class="invoice-status">
+                            <span th:classappend="${orden?.estado} == 'EN_PROCESO' ? 'status-proceso' : 
+                                                  (${orden?.estado} == 'COMPLETADO' ? 'status-completado' : 
+                                                  (${orden?.estado} == 'PENDIENTE' ? 'status-pendiente' : 
+                                                  (${orden?.estado} == 'ENTREGADO' ? 'status-entregado' : 'status-default')))">
+                                [[${orden?.estado}]]
+                            </span>
+                        </div>
+                        <div class="invoice-dates">
+                            <p><strong><i class="far fa-calendar-alt"></i> Fecha Ingreso:</strong> 
+                                <span th:if="${orden?.fechaIngreso != null}">
+                                    [[${#temporals.format(orden.fechaIngreso, 'dd/MM/yyyy HH:mm')}]]
+                                </span>
+                                <span th:unless="${orden?.fechaIngreso != null}">No registrada</span>
+                            </p>
+                            <p th:if="${orden?.fechaSalidaEstimada != null}">
+                                <strong><i class="far fa-clock"></i> Entrega Estimada:</strong> 
+                                [[${#temporals.format(orden.fechaSalidaEstimada, 'dd/MM/yyyy HH:mm')}]]
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-user-tie"></i> INFORMACIÓN DEL CLIENTE</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>DNI</th>
+                                    <th>Nombre Completo</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Fecha Registro</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>[[${orden.cliente?.dni}]]</td>
+                                    <td>[[${orden.cliente?.nombreCompleto}]]</td>
+                                    <td><i class="fas fa-phone"></i> [[${orden.cliente?.telefono}]]</td>
+                                    <td><i class="fas fa-envelope"></i> [[${orden.cliente?.email}]]</td>
+                                    <td>
+                                        <span th:if="${orden.cliente?.fechaRegistro != null}">
+                                            [[${#temporals.format(orden.cliente.fechaRegistro, 'dd/MM/yyyy')}]]
+                                        </span>
+                                        <span th:unless="${orden.cliente?.fechaRegistro != null}">No registrada</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-car"></i> INFORMACIÓN DEL VEHÍCULO</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Placa</th>
+                                    <th>Marca</th>
+                                    <th>Modelo</th>
+                                    <th>Año</th>
+                                    <th>Color</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge-placa">[[${vehiculo?.placa}]]</span></td>
+                                    <td>[[${vehiculo?.marca}]]</td>
+                                    <td>[[${vehiculo?.modelo}]]</td>
+                                    <td>[[${vehiculo?.anio}]]</td>
+                                    <td>
+                                        <span class="color-sample" th:if="${vehiculo?.color != null}" 
+                                            th:style="'background-color:' + ${vehiculo?.color}"></span>
+                                        [[${vehiculo?.color}]]
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-users"></i> PERSONAL A CARGO</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Nombre</th>
+                                    <th>Rol</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-recepcion">Recepción</span></td>
+                                    <td>
+                                        <span th:if="${orden?.usuarioRecepcion != null}">
+                                            [[${orden.usuarioRecepcion.nombreCompleto}]]
+                                        </span>
+                                        <span th:unless="${orden?.usuarioRecepcion != null}">No asignado</span>
+                                    </td>
+                                    <td>Recepcionista</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-tecnico">Técnico</span></td>
+                                    <td>
+                                        <span th:if="${orden?.tecnicoAsignado != null}">
+                                            [[${orden.tecnicoAsignado.nombreCompleto}]]
+                                        </span>
+                                        <span th:unless="${orden?.tecnicoAsignado != null}">No asignado</span>
+                                    </td>
+                                    <td>Técnico</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section" th:if="${detallesServicio != null && !detallesServicio.isEmpty()}">
+                    <h3 class="section-title"><i class="fas fa-tools"></i> SERVICIOS REALIZADOS</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Servicio</th>
+                                    <th>Descripción</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="detalle, stat : ${detallesServicio}">
+                                    <td>[[${stat.count}]]</td>
+                                    <td>[[${detalle.servicio?.nombreServicio}]]</td>
+                                    <td>[[${detalle.servicio?.descripcion}]]</td>
+                                    <td>[[${detalle.cantidad}]]</td>
+                                    <td>S/ [[${#numbers.formatDecimal(detalle.precioUnitario, 1, 2)}]]</td>
+                                    <td>S/ [[${#numbers.formatDecimal(detalle.cantidad * detalle.precioUnitario, 1, 2)}]]</td>
+                                </tr>
+                                <tr class="total-row">
+                                    <td colspan="5" style="text-align: right;"><strong>Total Servicios:</strong></td>
+                                    <td>
+                                        <strong>
+                                            S/ [[${#numbers.formatDecimal(
+                                                #lists.aggregate(detallesServicio, 
+                                                    @T(java.math.BigDecimal)@valueOf(0), 
+                                                    {sum, detalle -> sum.add(detalle.cantidad * detalle.precioUnitario)}
+                                                ), 1, 2)}]]
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section" th:unless="${detallesServicio != null && !detallesServicio.isEmpty()}">
+                    <h3 class="section-title"><i class="fas fa-tools"></i> SERVICIOS REALIZADOS</h3>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No se registraron servicios detallados para esta orden.
+                    </div>
+                </div>
+                <div class="section">
+                    <h3 class="section-title"><i class="fas fa-money-bill-wave"></i> RESUMEN DE COSTOS</h3>
+                    <div class="cost-summary">
+                        <div class="cost-row" th:if="${orden?.subtotal != null}">
+                            <span>Subtotal:</span>
+                            <span>S/ [[${#numbers.formatDecimal(orden.subtotal, 1, 2)}]]</span>
+                        </div>
+                        <div class="cost-row total">
+                            <span><strong>TOTAL ESTIMADO:</strong></span>
+                            <span><strong>S/ [[${#numbers.formatDecimal(orden?.costoTotal != null ? orden.costoTotal : 0, 1, 2)}]]</strong></span>
+                        </div>
+                        <div class="cost-notice">
+                            <p><i class="fas fa-info-circle"></i> Nota: Los precios son estimados y pueden variar según la complejidad del servicio.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="section guarantee-section">
+                    <h3 class="section-title"><i class="fas fa-shield-alt"></i> INFORMACIÓN DE GARANTÍA Y CONTACTO</h3>
+                    <div class="guarantee-info">
+                        <div class="guarantee-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <div>
+                                <h4>Garantía del Servicio</h4>
+                                <p>90 días en mano de obra y repuestos instalados</p>
+                            </div>
+                        </div>
+                        <div class="guarantee-item">
+                            <i class="fas fa-headset"></i>
+                            <div>
+                                <h4>Atención al Cliente</h4>
+                                <p>Martes a Sábado: 8:00 AM - 6:00 PM</p>
+                                <p>Domingo y Lunes: Cerrado</p>
+                            </div>
+                        </div>
+                        <div class="guarantee-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Visítenos</h4>
+                                <p>AV. Huancane, Juliaca - Puno</p>
+                                <p>Perú</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button onclick="window.print()" class="btn btn-primary print-btn">
+                        <i class="fas fa-print"></i> Imprimir Factura
+                    </button>
+                    <a href="/consulta/estado" class="btn btn-secondary">
+                        <i class="fas fa-search"></i> Nueva Consulta
+                    </a>
+                    <a href="/consulta" class="btn btn-outline">
+                        <i class="fas fa-home"></i> Volver al Inicio
+                    </a>
+                </div>
+            </div>
+            <div class="error-container" th:if="${error != null}">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2>No se encontró información</h2>
+                <p class="error-message">[[${error}]]</p>
+                <div class="action-buttons">
+                    <a href="/consulta/estado" class="btn btn-primary">
+                        <i class="fas fa-redo"></i> Intentar con otra placa
+                    </a>
+                    <a href="/consulta" class="btn btn-secondary">
+                        <i class="fas fa-home"></i> Volver al Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="consulta-footer">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-envelope"></i> ingecar@gmail.com</span>
+                <span><i class="fas fa-id-card"></i> RUC: 20609924871</span>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.print-btn')?.addEventListener('click', function() {
+                window.print();
+            });
+            
+            const style = document.createElement('style');
+            style.innerHTML = `
+                @media print {
+                    .consulta-header, .action-buttons, .consulta-footer {
+                        display: none !important;
+                    }
+                    body {
+                        background: white !important;
+                        color: black !important;
+                    }
+                    .invoice-container {
+                        box-shadow: none !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                    }
+                    .section {
+                        page-break-inside: avoid;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

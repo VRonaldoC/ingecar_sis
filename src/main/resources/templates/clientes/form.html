@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${cliente.idCliente} ? 'Editar Cliente' : 'Nuevo Cliente'">Cliente - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/clientes-form.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="/clientes" class="nav-link active">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <div class="title-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="title-content">
+                        <h2 th:text="${cliente.idCliente} ? 'Editar Cliente' : 'Nuevo Cliente'"></h2>
+                        <p class="page-subtitle">
+                            <span th:if="${cliente.idCliente}">Actualizando información del cliente</span>
+                            <span th:unless="${cliente.idCliente}">Registre un nuevo cliente en el sistema</span>
+                        </p>
+                    </div>
+                </div>
+                <a href="/clientes" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver a Clientes
+                </a>
+            </div>
+
+            <div class="form-container">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h3><i class="fas fa-id-card"></i> Información Personal</h3>
+                        <p>Complete los datos del cliente. Los campos marcados con <span class="required">*</span> son obligatorios.</p>
+                    </div>
+                    
+                    <form th:action="@{/clientes/guardar}" method="post" th:object="${cliente}" class="client-form">
+                        <input type="hidden" th:field="*{idCliente}">
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-id-badge"></i>
+                                    DNI
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-address-card"></i>
+                                    <input type="text" th:field="*{dni}" class="form-control" required 
+                                           placeholder="Ingrese DNI del cliente" 
+                                           pattern="[0-9]{8}"
+                                           title="El DNI debe tener 8 dígitos">
+                                </div>
+                                <div class="form-hint">8 dígitos sin espacios ni puntos</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i>
+                                    Nombre Completo
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-signature"></i>
+                                    <input type="text" th:field="*{nombreCompleto}" class="form-control" required 
+                                           placeholder="Nombres y apellidos completos">
+                                </div>
+                                <div class="form-hint">Ingrese nombres y apellidos completos</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-phone"></i>
+                                    Teléfono
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    <input type="tel" th:field="*{telefono}" class="form-control" 
+                                           placeholder="Ej: 921230909"
+                                           pattern="[0-9]{9}"
+                                           title="Número de 9 dígitos">
+                                </div>
+                                <div class="form-hint">Número de 9 dígitos sin espacios</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-envelope"></i>
+                                    Email
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-at"></i>
+                                    <input type="email" th:field="*{email}" class="form-control" 
+                                           placeholder="correo@ejemplo.com">
+                                </div>
+                                <div class="form-hint">Correo electrónico válido</div>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label class="form-label">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    Dirección
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-home"></i>
+                                    <input type="text" th:field="*{direccion}" class="form-control" 
+                                           placeholder="Dirección completa">
+                                </div>
+                                <div class="form-hint">Dirección completa del cliente</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-toggle-on"></i>
+                                    Estado
+                                </label>
+                                <div class="select-with-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                    <select th:field="*{estado}" class="form-control">
+                                        <option value="activo">Activo</option>
+                                        <option value="inactivo">Inactivo</option>
+                                    </select>
+                                </div>
+                                <div class="form-hint">Estado del cliente en el sistema</div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-save">
+                                <i class="fas fa-save"></i>
+                                <span th:text="${cliente.idCliente} ? 'Actualizar Cliente' : 'Registrar Cliente'"></span>
+                            </button>
+                            <a href="/clientes" class="btn-cancel">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="form-sidebar">
+                    <div class="sidebar-card tips-card">
+                        <div class="sidebar-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4>Consejos para registro</h4>
+                        <ul class="tips-list">
+                            <li><i class="fas fa-check-circle"></i> Verifique que el DNI sea correcto</li>
+                            <li><i class="fas fa-check-circle"></i> Use nombres completos y reales</li>
+                            <li><i class="fas fa-check-circle"></i> Solicite un teléfono válido</li>
+                            <li><i class="fas fa-check-circle"></i> El email es opcional pero útil</li>
+                            <li><i class="fas fa-check-circle"></i> Mantenga la dirección actualizada</li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card stats-card">
+                        <h4><i class="fas fa-chart-pie"></i> Estadísticas</h4>
+                        <div class="stats-mini">
+                            <div class="stat-mini">
+                                <div class="stat-mini-value">[[${totalClientes}]]</div>
+                                <div class="stat-mini-label">Clientes totales</div>
+                            </div>
+                            <div class="stat-mini">
+                                <div class="stat-mini-value">[[${clientesActivos}]]</div>
+                                <div class="stat-mini-label">Activos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Validación en tiempo real del DNI
+        document.addEventListener('DOMContentLoaded', function() {
+            const dniInput = document.querySelector('input[name="dni"]');
+            if (dniInput) {
+                dniInput.addEventListener('input', function(e) {
+                    // Solo permite números
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    // Limita a 8 dígitos
+                    if (this.value.length > 8) {
+                        this.value = this.value.slice(0, 8);
+                    }
+                });
+            }
+
+            // Validación del teléfono
+            const telefonoInput = document.querySelector('input[name="telefono"]');
+            if (telefonoInput) {
+                telefonoInput.addEventListener('input', function(e) {
+                    // Solo permite números
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                    // Limita a 9 dígitos
+                    if (this.value.length > 9) {
+                        this.value = this.value.slice(0, 9);
+                    }
+                });
+            }
+
+            // Validación del nombre (solo letras y espacios)
+            const nombreInput = document.querySelector('input[name="nombreCompleto"]');
+            if (nombreInput) {
+                nombreInput.addEventListener('input', function(e) {
+                    // Permite letras, espacios y acentos
+                    this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

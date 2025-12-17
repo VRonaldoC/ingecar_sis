@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Servicios - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/catalogo-list.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="/clientes" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link active">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-tools"></i>
+                    <h2>Catálogo de Servicios</h2>
+                </div>
+                <div class="page-actions">
+                    <a href="/catalogos/nuevo" class="btn-new">
+                        <i class="fas fa-plus-circle"></i>
+                        Nuevo Servicio
+                    </a>
+                </div>
+            </div>
+
+            <!-- Estadísticas rápidas -->
+            <div class="quick-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>[[${totalServicios}]]</h3>
+                        <p>Total Servicios</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>[[${serviciosActivos}]]</h3>
+                        <p>Activos</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-pause-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>[[${serviciosInactivos}]]</h3>
+                        <p>Inactivos</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel de búsqueda y filtros -->
+            <div class="search-panel">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar servicios por nombre o descripción...">
+                </div>
+                <div class="filter-options">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="all">Todos los estados</option>
+                        <option value="activo">Solo activos</option>
+                        <option value="inactivo">Solo inactivos</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Tabla de servicios -->
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="services-table">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> ID</th>
+                                <th><i class="fas fa-tag"></i> Nombre</th>
+                                <th><i class="fas fa-align-left"></i> Descripción</th>
+                                <th><i class="fas fa-money-bill-wave"></i> Precio</th>
+                                <th><i class="fas fa-clock"></i> Tiempo</th>
+                                <th><i class="fas fa-toggle-on"></i> Estado</th>
+                                <th><i class="fas fa-cogs"></i> Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="s : ${servicios}" class="service-row">
+                                <td class="service-id">#[[${s.idServicio}]]</td>
+                                <td class="service-name">[[${s.nombreServicio}]]</td>
+                                <td class="service-desc">[[${s.descripcion}]]</td>
+                                <td class="service-price">
+                                    <span class="price-tag">S/ [[${s.precioReferencial}]]</span>
+                                </td>
+                                <td class="service-time">
+                                    <span class="time-badge">
+                                        <i class="fas fa-clock"></i>
+                                        [[${s.tiempoEstimadoHoras}]] h
+                                    </span>
+                                </td>
+                                <td class="service-status">
+                                    <span th:class="${#strings.toLowerCase(s.estado) == 'activo'} ? 'status-active' : 'status-inactive'">
+                                        <i class="fas fa-check-circle" th:if="${#strings.toLowerCase(s.estado) == 'activo'}"></i>
+                                        <i class="fas fa-times-circle" th:unless="${#strings.toLowerCase(s.estado) == 'activo'}"></i>
+                                        [[${s.estado}]]
+                                    </span>
+                                </td>
+                                <td class="service-actions">
+                                    <a th:href="@{/catalogos/editar/{id}(id=${s.idServicio})}" class="btn-action edit-btn">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </a>
+                                    <a th:href="@{/catalogos/eliminar/{id}(id=${s.idServicio})}" class="btn-action delete-btn" 
+                                    onclick="return confirm('¿Está seguro de eliminar este servicio?');">
+                                        <i class="fas fa-trash-alt"></i>
+                                        Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${servicios.empty}" class="no-data-row">
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <i class="fas fa-tools"></i>
+                                        <h3>No hay servicios registrados</h3>
+                                        <p>Comience agregando un nuevo servicio al catálogo</p>
+                                        <a href="/catalogos/nuevo" class="btn-empty">
+                                            <i class="fas fa-plus"></i>
+                                            Agregar Primer Servicio
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Búsqueda y filtrado en tiempo real
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            const serviceRows = document.querySelectorAll('.service-row');
+
+            function filterServices() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const statusValue = statusFilter.value;
+
+                serviceRows.forEach(row => {
+                    const name = row.querySelector('.service-name').textContent.toLowerCase();
+                    const desc = row.querySelector('.service-desc').textContent.toLowerCase();
+                    const status = row.querySelector('.service-status span').classList.contains('status-active') ? 'activo' : 'inactivo';
+                    
+                    const matchesSearch = name.includes(searchTerm) || desc.includes(searchTerm);
+                    const matchesStatus = statusValue === 'all' || status === statusValue;
+                    
+                    if (matchesSearch && matchesStatus) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            searchInput.addEventListener('input', filterServices);
+            statusFilter.addEventListener('change', filterServices);
+
+            // Animación de entrada para filas
+            serviceRows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.05}s`;
+            });
+        });
+    </script>
+</body>
+</html>

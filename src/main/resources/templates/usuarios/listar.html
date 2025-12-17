@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Usuarios - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/usuarios-listar.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="/clientes" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link active">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <div class="page-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <h1>Usuarios del Sistema</h1>
+                </div>
+                <a href="/usuarios/nuevo" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i>
+                    Nuevo Usuario
+                </a>
+            </div>
+            
+            <!-- Estadísticas -->
+            <div class="users-stats">
+                <div class="stat-card total">
+                    <i class="fas fa-users stat-icon"></i>
+                    <div class="stat-number" th:text="${#lists.size(usuarios)}">0</div>
+                    <div class="stat-label">Total Usuarios</div>
+                </div>
+                
+                <div class="stat-card active">
+                    <i class="fas fa-user-check stat-icon"></i>
+                    <div class="stat-number" th:text="${#lists.size(usuarios.?[estado == 'activo'])}">0</div>
+                    <div class="stat-label">Activos</div>
+                </div>
+                
+                <div class="stat-card inactive">
+                    <i class="fas fa-user-slash stat-icon"></i>
+                    <div class="stat-number" th:text="${#lists.size(usuarios.?[estado == 'inactivo'])}">0</div>
+                    <div class="stat-label">Inactivos</div>
+                </div>
+                
+                <div class="stat-card admin">
+                    <i class="fas fa-crown stat-icon"></i>
+                    <div class="stat-number" th:text="${#lists.size(usuarios.?[rol == 'administrador'])}">0</div>
+                    <div class="stat-label">Administradores</div>
+                </div>
+            </div>
+            
+            <!-- Tabla de usuarios -->
+            <div class="users-table-container">
+                <div class="table-header">
+                    <h3 class="table-title">
+                        <i class="fas fa-list"></i>
+                        Lista de Usuarios
+                    </h3>
+                    <div class="table-tools">
+                        <div class="search-box">
+                            <input type="text" class="search-input" placeholder="Buscar usuario...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                        <a href="/usuarios/cambiar-password" class="btn btn-sm btn-secondary">
+                            <i class="fas fa-key"></i>
+                            Cambiar Mi Contraseña
+                        </a>
+                    </div>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Nombre Completo</th>
+                            <th>Rol</th>
+                            <th>Email</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${usuarios}">
+                            <td>
+                                <div class="user-avatar">
+                                    <div class="avatar-icon">
+                                        [[${#strings.substring(u.nombreCompleto, 0, 1)}]]
+                                    </div>
+                                    <div>
+                                        <strong>[[${u.nombreUsuario}]]</strong>
+                                        <div class="text-muted">ID: [[${u.idUsuario}]]</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>[[${u.nombreCompleto}]]</td>
+                            <td>
+                                <span class="role-badge"
+                                    th:switch="${u.rol}">
+                                    <span th:case="'administrador'" class="badge-admin">
+                                        <i class="fas fa-crown"></i> Administrador
+                                    </span>
+                                    <span th:case="'tecnico'" class="badge-technician">
+                                        <i class="fas fa-tools"></i> Técnico
+                                    </span>
+                                    <span th:case="'recepcionista'" class="badge-receptionist">
+                                        <i class="fas fa-headset"></i> Recepcionista
+                                    </span>
+                                    <span th:case="*" class="badge-default">
+                                        <i class="fas fa-user"></i> [[${u.rol}]]
+                                    </span>
+                                </span>
+                            </td>
+                            <td>
+                                <div th:if="${u.email}">
+                                    <i class="fas fa-envelope"></i>
+                                    [[${u.email}]]
+                                </div>
+                                <div th:unless="${u.email}" class="text-muted">
+                                    <i class="fas fa-envelope"></i>
+                                    No especificado
+                                </div>
+                            </td>
+                            <td>
+                                <span th:class="${#strings.toLowerCase(u.estado) == 'activo'} ? 'status-badge badge-active' : 'status-badge badge-inactive'">
+                                    <i class="fas fa-circle"></i>
+                                    [[${u.estado}]]
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a th:href="@{/usuarios/editar/{id}(id=${u.idUsuario})}" 
+                                       class="btn-action edit" 
+                                       title="Editar usuario">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a th:href="@{/usuarios/eliminar/{id}(id=${u.idUsuario})}" 
+                                       class="btn-action delete" 
+                                       title="Eliminar usuario"
+                                       onclick="return confirm('¿Estás seguro de eliminar al usuario [[${u.nombreUsuario}]]?')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    <a th:href="@{/usuarios/cambiar-password/{id}(id=${u.idUsuario})}" 
+                                       class="btn-action password" 
+                                       title="Cambiar contraseña">
+                                        <i class="fas fa-key"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${usuarios.empty}">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <i class="fas fa-users empty-icon"></i>
+                                    <div class="empty-message">No hay usuarios registrados en el sistema</div>
+                                    <a href="/usuarios/nuevo" class="btn btn-primary">
+                                        <i class="fas fa-user-plus"></i>
+                                        Crear Primer Usuario
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.table tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+        
+        // Confirm delete with custom message
+        document.querySelectorAll('.btn-action.delete').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const userName = this.closest('tr').querySelector('.user-avatar strong').textContent;
+                if (!confirm(`¿Estás seguro de eliminar al usuario "${userName}"? Esta acción no se puede deshacer.`)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

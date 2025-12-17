@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Órdenes - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/ordenes-list.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="/clientes" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link active">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <!-- Header de página -->
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>Órdenes de Servicio</h2>
+                </div>
+                <div class="page-actions">
+                    <a href="/reportes" class="btn-new">
+                        <i class="fas fa-chart-bar"></i>
+                        Ver Reportes
+                    </a>
+                </div>
+            </div>
+
+            <!-- Estadísticas -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">[[${totalOrdenes}]]</div>
+                        <div class="stat-label">Total Órdenes</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e74c3c;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">[[${ordenesPendientes}]]</div>
+                        <div class="stat-label">Pendientes</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f39c12;">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">[[${ordenesEnProceso}]]</div>
+                        <div class="stat-label">En Proceso</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #27ae60;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div>
+                        <div class="stat-number">[[${ordenesCompletadas}]]</div>
+                        <div class="stat-label">Completadas</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de órdenes -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-list"></i> Lista de Órdenes</h3>
+                    <div class="table-tools">
+                        <div class="search-box">
+                            <input type="text" class="search-input" placeholder="Buscar orden...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Vehículo</th>
+                            <th>Cliente</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Costo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="o : ${ordenes}">
+                            <td>#[[${o.idOrden}]]</td>
+                            <td>
+                                <span th:if="${o.vehiculo}">[[${o.vehiculo.placa}]]</span>
+                                <span th:unless="${o.vehiculo}" style="color:#999;">-</span>
+                            </td>
+                            <td>
+                                <span th:if="${o.cliente}">[[${o.cliente.nombreCompleto}]]</span>
+                                <span th:unless="${o.cliente}" style="color:#999;">-</span>
+                            </td>
+                            <td th:text="${#temporals.format(o.fechaIngreso, 'dd/MM/yy')}"></td>
+                            <td>
+                                <span th:switch="${o.estado}">
+                                    <span th:case="'pendiente'" class="status status-pendiente">
+                                        <i class="fas fa-clock"></i> Pendiente
+                                    </span>
+                                    <span th:case="'en_proceso'" class="status status-proceso">
+                                        <i class="fas fa-cogs"></i> En Proceso
+                                    </span>
+                                    <span th:case="'proceso'" class="status status-proceso">
+                                        <i class="fas fa-cogs"></i> En Proceso
+                                    </span>
+                                    <span th:case="'completado'" class="status status-completado">
+                                        <i class="fas fa-check-circle"></i> Completado
+                                    </span>
+                                    <span th:case="'entregado'" class="status status-entregado">
+                                        <i class="fas fa-check-double"></i> Entregado
+                                    </span>
+                                    <span th:case="*" class="status">
+                                        <i class="fas fa-question-circle"></i> [[${o.estado}]]
+                                    </span>
+                                </span>
+                            </td>
+                            <td>S/ [[${o.costoTotal != null ? o.costoTotal : '0.00'}]]</td>
+                            <td>
+                                <div class="actions">
+                                    <a th:href="@{/ordenes/id/{id}(id=${o.idOrden})}" class="btn-action btn-view">
+                                        <i class="fas fa-eye"></i>
+                                        Ver
+                                    </a>
+                                    <a th:href="@{/ordenes/editar/{id}(id=${o.idOrden})}" class="btn-action btn-edit">
+                                        <i class="fas fa-edit"></i>
+                                        Editar
+                                    </a>
+                                    <a th:href="@{/ordenes/eliminar/{id}(id=${o.idOrden})}" 
+                                       class="btn-action btn-delete"
+                                       onclick="return confirm('¿Eliminar orden #[[${o.idOrden}]]?');">
+                                        <i class="fas fa-trash"></i>
+                                        Eliminar
+                                    </a>
+                                    <a th:href="@{/ordenes/actualizar-estado/{id}/{estado}(id=${o.idOrden}, estado='en_proceso')}" 
+                                       class="btn-action btn-process"
+                                       th:if="${o.estado == 'pendiente'}"
+                                       onclick="return confirm('¿Cambiar orden #[[${o.idOrden}]] a En Proceso?');">
+                                        <i class="fas fa-play"></i>
+                                    </a>
+                                    <a th:href="@{/ordenes/actualizar-estado/{id}/{estado}(id=${o.idOrden}, estado='completado')}" 
+                                       class="btn-action btn-complete"
+                                       th:if="${o.estado == 'en_proceso' or o.estado == 'proceso'}"
+                                       onclick="return confirm('¿Marcar orden #[[${o.idOrden}]] como completada?');">
+                                        <i class="fas fa-check"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${ordenes.empty}">
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <h4>No hay órdenes registradas</h4>
+                                    <p>Comienza creando una nueva orden desde la sección de clientes.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Búsqueda en tiempo real
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('.orders-table tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>

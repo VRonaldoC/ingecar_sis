@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vehículo - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/vehiculo-detalle.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="/clientes" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <div class="title-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h1>Detalles del Vehículo</h1>
+                </div>
+                <a th:href="@{/clientes/detalle/{dni}(dni=${vehiculo.cliente.dni})}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver al Cliente
+                </a>
+            </div>
+            
+            <div class="vehicle-card">
+                <div class="vehicle-header">
+                    <div class="vehicle-plate">
+                        [[${vehiculo.placa}]]
+                    </div>
+                    <div class="vehicle-basic-info">
+                        <div class="vehicle-model">
+                            [[${vehiculo.marca}]] [[${vehiculo.modelo}]]
+                        </div>
+                        <div class="vehicle-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>[[${vehiculo.anio}]]</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>[[${vehiculo.kilometraje}]] km</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-palette"></i>
+                                <span>[[${vehiculo.color}]]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vehicle-content">
+                    <div class="info-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-info-circle"></i>
+                            Información Técnica
+                        </h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">Placa</div>
+                                <div class="info-value">[[${vehiculo.placa}]]</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Marca</div>
+                                <div class="info-value">[[${vehiculo.marca}]]</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Modelo</div>
+                                <div class="info-value">[[${vehiculo.modelo}]]</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Año</div>
+                                <div class="info-value year">[[${vehiculo.anio}]]</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Color</div>
+                                <div class="info-value color">
+                                    <div class="color-sample" id="colorSample"></div>
+                                    [[${vehiculo.color}]]
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Kilometraje</div>
+                                <div class="info-value km">[[${vehiculo.kilometraje}]] km</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Registrado el</div>
+                                <div class="info-value">[[${#temporals.format(vehiculo.fechaRegistro, 'dd/MM/yyyy')}]]</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="owner-card">
+                        <div class="owner-header">
+                            <div class="owner-avatar">
+                                [[${#strings.substring(vehiculo.cliente.nombreCompleto, 0, 1)}]]
+                            </div>
+                            <div class="owner-name">
+                                <h4>[[${vehiculo.cliente.nombreCompleto}]]</h4>
+                                <div class="owner-dni">DNI: [[${vehiculo.cliente.dni}]]</div>
+                            </div>
+                        </div>
+                        
+                        <div class="owner-details">
+                            <div class="owner-detail">
+                                <i class="fas fa-user"></i>
+                                <div>
+                                    <div class="info-label">Nombre Completo</div>
+                                    <div class="info-value">[[${vehiculo.cliente.nombreCompleto}]]</div>
+                                </div>
+                            </div>
+                            
+                            <div class="owner-detail">
+                                <i class="fas fa-id-card"></i>
+                                <div>
+                                    <div class="info-label">DNI</div>
+                                    <div class="info-value">[[${vehiculo.cliente.dni}]]</div>
+                                </div>
+                            </div>
+                            
+                            <div th:if="${vehiculo.cliente.telefono}" class="owner-detail">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <div class="info-label">Teléfono</div>
+                                    <div class="info-value">[[${vehiculo.cliente.telefono}]]</div>
+                                </div>
+                            </div>
+                            
+                            <div th:if="${vehiculo.cliente.email}" class="owner-detail">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <div class="info-label">Email</div>
+                                    <div class="info-value">[[${vehiculo.cliente.email}]]</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vehicle-content">
+                    <div class="action-buttons">
+                        <a th:href="@{/ordenes/nueva/{placa}(placa=${vehiculo.placa})}" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i>
+                            Crear Nueva Orden
+                        </a>
+                        <a th:href="@{/vehiculos/editar/{id}(id=${vehiculo.idVehiculo})}" class="btn btn-edit">
+                            <i class="fas fa-edit"></i>
+                            Editar Vehículo
+                        </a>
+                        <a th:href="@{/clientes/detalle/{dni}(dni=${vehiculo.cliente.dni})}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Volver al Cliente
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Convertir nombre de color a código hex
+            const colorSample = document.getElementById('colorSample');
+            if (colorSample) {
+                const colorName = colorSample.parentElement.textContent.trim().toLowerCase();
+                const colorHex = getColorHex(colorName);
+                if (colorHex) {
+                    colorSample.style.backgroundColor = colorHex;
+                } else {
+                    // Si no se encuentra, intentar usar el color directamente
+                    try {
+                        // Verificar si es un código hexadecimal
+                        if (colorName.match(/^#?[0-9a-f]{6}$/i)) {
+                            colorSample.style.backgroundColor = colorName.startsWith('#') ? colorName : '#' + colorName;
+                        } else if (colorName.match(/^rgb\(/)) {
+                            colorSample.style.backgroundColor = colorName;
+                        } else {
+                            colorSample.style.backgroundColor = '#cccccc';
+                        }
+                    } catch (e) {
+                        colorSample.style.backgroundColor = '#cccccc';
+                    }
+                }
+            }
+            
+            function getColorHex(colorName) {
+                const colors = {
+                    'rojo': '#ff0000', 'red': '#ff0000',
+                    'azul': '#0000ff', 'blue': '#0000ff',
+                    'verde': '#00ff00', 'green': '#00ff00',
+                    'amarillo': '#ffff00', 'yellow': '#ffff00',
+                    'negro': '#000000', 'black': '#000000',
+                    'blanco': '#ffffff', 'white': '#ffffff',
+                    'gris': '#808080', 'gray': '#808080', 'grey': '#808080',
+                    'plateado': '#c0c0c0', 'silver': '#c0c0c0',
+                    'dorado': '#ffd700', 'gold': '#ffd700',
+                    'naranja': '#ffa500', 'orange': '#ffa500',
+                    'morado': '#800080', 'purple': '#800080',
+                    'rosa': '#ffc0cb', 'pink': '#ffc0cb',
+                    'marrón': '#a52a2a', 'brown': '#a52a2a', 'marron': '#a52a2a',
+                    'beige': '#f5f5dc',
+                    'celeste': '#87ceeb', 'skyblue': '#87ceeb',
+                    'turquesa': '#40e0d0', 'turquoise': '#40e0d0',
+                    'violeta': '#ee82ee', 'violet': '#ee82ee'
+                };
+                
+                // Limpiar el nombre del color
+                const cleanName = colorName.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/g, '').toLowerCase();
+                return colors[cleanName];
+            }
+        });
+    </script>
+</body>
+</html>

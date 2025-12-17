@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${servicio.idServicio} ? 'Editar Servicio' : 'Nuevo Servicio'">Servicio - INGECAR</title>
+    <link rel="stylesheet" th:href="@{/css/catalogo-form.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-car-alt"></i>
+                </div>
+                <h1>Taller Automotriz INGECAR</h1>
+            </div>
+            <nav class="main-nav">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="/clientes" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Clientes</span>
+                </a>
+                <a href="/ordenes" class="nav-link">
+                    <i class="fas fa-clipboard-list"></i>
+                    <span>Órdenes</span>
+                </a>
+                <a href="/catalogos" class="nav-link active">
+                    <i class="fas fa-tools"></i>
+                    <span>Servicios</span>
+                </a>
+                <a href="/reportes" class="nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reportes</span>
+                </a>
+                <a href="/usuarios" class="nav-link">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Usuarios</span>
+                </a>
+                <a href="/auth/logout" class="nav-link logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-tools"></i>
+                    <h2 th:text="${servicio.idServicio} ? 'Editar Servicio' : 'Nuevo Servicio'"></h2>
+                </div>
+                <a href="/catalogos" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Volver a Servicios
+                </a>
+            </div>
+
+            <div class="form-container">
+                <div class="form-card">
+                    <div class="form-header">
+                        <h3><i class="fas fa-wrench"></i> Información del Servicio</h3>
+                        <p>Complete todos los campos para registrar un nuevo servicio</p>
+                    </div>
+                    
+                    <form th:action="@{/catalogos/guardar}" method="post" th:object="${servicio}" class="service-form">
+                        <input type="hidden" th:field="*{idServicio}">
+                        
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-tag"></i>
+                                    Nombre del Servicio
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-file-signature"></i>
+                                    <input type="text" th:field="*{nombreServicio}" class="form-control" required 
+                                           placeholder="Ej: Cambio de aceite y filtro">
+                                </div>
+                                <div class="form-hint">Nombre descriptivo del servicio</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    Precio Referencial
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                    <input type="number" step="0.01" th:field="*{precioReferencial}" class="form-control" 
+                                           placeholder="0.00">
+                                </div>
+                                <div class="form-hint">Precio sugerido en soles (S/)</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-clock"></i>
+                                    Tiempo Estimado
+                                </label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-hourglass-half"></i>
+                                    <input type="number" th:field="*{tiempoEstimadoHoras}" class="form-control" 
+                                           placeholder="Ej: 2">
+                                </div>
+                                <div class="form-hint">Horas aproximadas de trabajo</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <i class="fas fa-toggle-on"></i>
+                                    Estado
+                                </label>
+                                <div class="select-with-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                    <select th:field="*{estado}" class="form-control">
+                                        <option value="activo">Activo</option>
+                                        <option value="inactivo">Inactivo</option>
+                                    </select>
+                                </div>
+                                <div class="form-hint">Disponibilidad del servicio</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-align-left"></i>
+                                Descripción Detallada
+                            </label>
+                            <div class="textarea-with-icon">
+                                <i class="fas fa-file-alt"></i>
+                                <textarea th:field="*{descripcion}" class="form-control" rows="4" 
+                                          placeholder="Describa en detalle el servicio, procedimientos, materiales requeridos..."></textarea>
+                            </div>
+                            <div class="form-hint">Incluya pasos del procedimiento y recomendaciones</div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-save">
+                                <i class="fas fa-save"></i>
+                                <span th:text="${servicio.idServicio} ? 'Actualizar Servicio' : 'Guardar Servicio'"></span>
+                            </button>
+                            <a th:href="@{/catalogos}" class="btn-cancel">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="info-sidebar">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h4>Consejos para registrar servicios</h4>
+                        <ul class="info-list">
+                            <li><i class="fas fa-check-circle"></i> Use nombres claros y descriptivos</li>
+                            <li><i class="fas fa-check-circle"></i> Estime tiempos realistas</li>
+                            <li><i class="fas fa-check-circle"></i> Incluya todos los pasos en la descripción</li>
+                            <li><i class="fas fa-check-circle"></i> Actualice precios regularmente</li>
+                            <li><i class="fas fa-check-circle"></i> Marque como inactivo servicios temporales</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <h4><i class="fas fa-chart-pie"></i> Estadísticas</h4>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value">[[${totalServicios}]]</div>
+                                <div class="stat-label">Total Servicios</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">[[${serviciosActivos}]]</div>
+                                <div class="stat-label">Activos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">[[${serviciosInactivos}]]</div>
+                                <div class="stat-label">Inactivos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="dashboard-footer-main">
+        <div class="footer-container">
+            <p>Sistema de Gestión de Órdenes - Taller INGECAR &copy; 2023</p>
+            <div class="footer-links">
+                <span><i class="fas fa-phone"></i> 921230909</span>
+                <span><i class="fas fa-map-marker-alt"></i> Quenaya, Puno</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Validación de precio
+        document.addEventListener('DOMContentLoaded', function() {
+            const precioInput = document.querySelector('input[name="precioReferencial"]');
+            if (precioInput) {
+                precioInput.addEventListener('input', function(e) {
+                    if (this.value < 0) {
+                        this.value = 0;
+                    }
+                });
+            }
+
+            // Validación de tiempo
+            const tiempoInput = document.querySelector('input[name="tiempoEstimadoHoras"]');
+            if (tiempoInput) {
+                tiempoInput.addEventListener('input', function(e) {
+                    if (this.value < 0) {
+                        this.value = 0;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
