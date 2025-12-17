@@ -1,7 +1,7 @@
 ﻿FROM maven:3.9.9-amazoncorretto-21 AS build
 WORKDIR /app
 COPY . .
-RUN ./mvnw clean package -DskipTests
+RUN chmod +x mvnw && ./mvnw clean package -DskipTests
 
 FROM amazoncorretto:21
 WORKDIR /app
