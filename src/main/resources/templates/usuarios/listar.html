@@ -68,34 +68,7 @@
                     <i class="fas fa-user-plus"></i>
                     Nuevo Usuario
                 </a>
-            </div>
-            
-            <div class="users-stats">
-                <div class="stat-card total">
-                    <i class="fas fa-users stat-icon"></i>
-                    <div class="stat-number" th:text="${#lists.size(usuarios)}">0</div>
-                    <div class="stat-label">Total Usuarios</div>
-                </div>
-                
-                <div class="stat-card active">
-                    <i class="fas fa-user-check stat-icon"></i>
-                    <div class="stat-number" th:text="${#lists.size(usuarios.?[estado == 'activo'])}">0</div>
-                    <div class="stat-label">Activos</div>
-                </div>
-                
-                <div class="stat-card inactive">
-                    <i class="fas fa-user-slash stat-icon"></i>
-                    <div class="stat-number" th:text="${#lists.size(usuarios.?[estado == 'inactivo'])}">0</div>
-                    <div class="stat-label">Inactivos</div>
-                </div>
-                
-                <div class="stat-card admin">
-                    <i class="fas fa-crown stat-icon"></i>
-                    <div class="stat-number" th:text="${#lists.size(usuarios.?[rol == 'administrador'])}">0</div>
-                    <div class="stat-label">Administradores</div>
-                </div>
-            </div>
-            
+            </div>            
             <div class="users-table-container">
                 <div class="table-header">
                     <h3 class="table-title">

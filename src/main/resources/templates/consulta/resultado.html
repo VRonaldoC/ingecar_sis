@@ -195,11 +195,7 @@
                                     <td colspan="5" style="text-align: right;"><strong>Total Servicios:</strong></td>
                                     <td>
                                         <strong>
-                                            S/ [[${#numbers.formatDecimal(
-                                                #lists.aggregate(detallesServicio, 
-                                                    @T(java.math.BigDecimal)@valueOf(0), 
-                                                    {sum, detalle -> sum.add(detalle.cantidad * detalle.precioUnitario)}
-                                                ), 1, 2)}]]
+                                            S/ [[${orden.costoTotal}]]
                                         </strong>
                                     </td>
                                 </tr>
