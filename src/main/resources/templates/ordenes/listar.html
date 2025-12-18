@@ -75,95 +75,99 @@
                     </div>
                 </div>
                 
-                <table class="orders-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Vehículo</th>
-                            <th>Cliente</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                            <th>Costo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="o : ${ordenes}">
-                            <td>#[[${o.idOrden}]]</td>
-                            <td>
-                                <span th:if="${o.vehiculo}">[[${o.vehiculo.placa}]]</span>
-                                <span th:unless="${o.vehiculo}" style="color:#999;">-</span>
-                            </td>
-                            <td>
-                                <span th:if="${o.cliente}">[[${o.cliente.nombreCompleto}]]</span>
-                                <span th:unless="${o.cliente}" style="color:#999;">-</span>
-                            </td>
-                            <td th:text="${#temporals.format(o.fechaIngreso, 'dd/MM/yy')}"></td>
-                            <td>
-                                <span th:switch="${o.estado}">
-                                    <span th:case="'pendiente'" class="status status-pendiente">
-                                        <i class="fas fa-clock"></i> Pendiente
+                <!-- CONTENEDOR CON SCROLL RESPONSIVO -->
+                <div class="table-responsive">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Vehículo</th>
+                                <th>Cliente</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Costo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="o : ${ordenes}">
+                                <td>#[[${o.idOrden}]]</td>
+                                <td>
+                                    <span th:if="${o.vehiculo}">[[${o.vehiculo.placa}]]</span>
+                                    <span th:unless="${o.vehiculo}" style="color:#999;">-</span>
+                                </td>
+                                <td>
+                                    <span th:if="${o.cliente}">[[${o.cliente.nombreCompleto}]]</span>
+                                    <span th:unless="${o.cliente}" style="color:#999;">-</span>
+                                </td>
+                                <td th:text="${#temporals.format(o.fechaIngreso, 'dd/MM/yy')}"></td>
+                                <td>
+                                    <span th:switch="${o.estado}">
+                                        <span th:case="'pendiente'" class="status status-pendiente">
+                                            <i class="fas fa-clock"></i> Pendiente
+                                        </span>
+                                        <span th:case="'en_proceso'" class="status status-proceso">
+                                            <i class="fas fa-cogs"></i> En Proceso
+                                        </span>
+                                        <span th:case="'proceso'" class="status status-proceso">
+                                            <i class="fas fa-cogs"></i> En Proceso
+                                        </span>
+                                        <span th:case="'completado'" class="status status-completado">
+                                            <i class="fas fa-check-circle"></i> Completado
+                                        </span>
+                                        <span th:case="'entregado'" class="status status-entregado">
+                                            <i class="fas fa-check-double"></i> Entregado
+                                        </span>
+                                        <span th:case="*" class="status">
+                                            <i class="fas fa-question-circle"></i> [[${o.estado}]]
+                                        </span>
                                     </span>
-                                    <span th:case="'en_proceso'" class="status status-proceso">
-                                        <i class="fas fa-cogs"></i> En Proceso
-                                    </span>
-                                    <span th:case="'proceso'" class="status status-proceso">
-                                        <i class="fas fa-cogs"></i> En Proceso
-                                    </span>
-                                    <span th:case="'completado'" class="status status-completado">
-                                        <i class="fas fa-check-circle"></i> Completado
-                                    </span>
-                                    <span th:case="'entregado'" class="status status-entregado">
-                                        <i class="fas fa-check-double"></i> Entregado
-                                    </span>
-                                    <span th:case="*" class="status">
-                                        <i class="fas fa-question-circle"></i> [[${o.estado}]]
-                                    </span>
-                                </span>
-                            </td>
-                            <td>S/ [[${o.costoTotal != null ? o.costoTotal : '0.00'}]]</td>
-                            <td>
-                                <div class="actions">
-                                    <a th:href="@{/ordenes/id/{id}(id=${o.idOrden})}" class="btn-action btn-view">
-                                        <i class="fas fa-eye"></i>
-                                        Ver
-                                    </a>
-                                    <a th:href="@{/ordenes/editar/{id}(id=${o.idOrden})}" class="btn-action btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                        Editar
-                                    </a>
-                                    <a th:href="@{/ordenes/eliminar/{id}(id=${o.idOrden})}" 
-                                       class="btn-action btn-delete"
-                                       onclick="return confirm('¿Eliminar orden?');">
-                                        <i class="fas fa-trash"></i>
-                                        Eliminar
-                                    </a>
-                                    <a th:href="@{/ordenes/actualizar-estado/{id}/{estado}(id=${o.idOrden}, estado='en_proceso')}" 
-                                       class="btn-action btn-process"
-                                       th:if="${o.estado == 'pendiente'}"
-                                       onclick="return confirm('¿Cambiar orden a En Proceso?');">
-                                        <i class="fas fa-play"></i>
-                                    </a>
-                                    <a th:href="@{/ordenes/actualizar-estado/{id}/{estado}(id=${o.idOrden}, estado='completado')}" 
-                                       class="btn-action btn-complete"
-                                       th:if="${o.estado == 'en_proceso' or o.estado == 'proceso'}"
-                                       onclick="return confirm('¿Marcar orden como completada?');">
-                                        <i class="fas fa-check"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr th:if="${ordenes.empty}">
-                            <td colspan="7">
-                                <div class="empty-state">
-                                    <i class="fas fa-clipboard-list"></i>
-                                    <h4>No hay órdenes registradas</h4>
-                                    <p>Comienza creando una nueva orden desde la sección de clientes.</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td>S/ [[${o.costoTotal != null ? o.costoTotal : '0.00'}]]</td>
+                                <td>
+                                    <div class="actions">
+                                        <a th:href="@{/ordenes/id/{id}(id=${o.idOrden})}" class="btn-action btn-view">
+                                            <i class="fas fa-eye"></i>
+                                            Ver
+                                        </a>
+                                        <a th:href="@{/ordenes/editar/{id}(id=${o.idOrden})}" class="btn-action btn-edit">
+                                            <i class="fas fa-edit"></i>
+                                            Editar
+                                        </a>
+                                        <a th:href="@{/ordenes/eliminar/{id}(id=${o.idOrden})}" 
+                                           class="btn-action btn-delete"
+                                           onclick="return confirm('¿Eliminar orden?');">
+                                            <i class="fas fa-trash"></i>
+                                            Eliminar
+                                        </a>
+                                        <a th:href="@{/ordenes/actualizar-estado/{id}/{estado}(id=${o.idOrden}, estado='en_proceso')}" 
+                                           class="btn-action btn-process"
+                                           th:if="${o.estado == 'pendiente'}"
+                                           onclick="return confirm('¿Cambiar orden a En Proceso?');">
+                                            <i class="fas fa-play"></i>
+                                        </a>
+                                        <a th:href="@{/ordenes/actualizar-estado/{id}/{estado}(id=${o.idOrden}, estado='completado')}" 
+                                           class="btn-action btn-complete"
+                                           th:if="${o.estado == 'en_proceso' or o.estado == 'proceso'}"
+                                           onclick="return confirm('¿Marcar orden como completada?');">
+                                            <i class="fas fa-check"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${ordenes.empty}">
+                                <td colspan="7">
+                                    <div class="empty-state">
+                                        <i class="fas fa-clipboard-list"></i>
+                                        <h4>No hay órdenes registradas</h4>
+                                        <p>Comienza creando una nueva orden desde la sección de clientes.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- FIN CONTENEDOR SCROLL -->
             </div>
         </div>
     </main>
