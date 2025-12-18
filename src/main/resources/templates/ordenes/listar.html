@@ -175,20 +175,20 @@
                                     </a>
                                     <a th:href="@{/ordenes/eliminar/{id}(id=${o.idOrden})}" 
                                        class="btn-action btn-delete"
-                                       onclick="return confirm('¿Eliminar orden #[[${o.idOrden}]]?');">
+                                       onclick="return confirm('¿Eliminar orden?');">
                                         <i class="fas fa-trash"></i>
                                         Eliminar
                                     </a>
                                     <a th:href="@{/ordenes/actualizar-estado/{id}/{estado}(id=${o.idOrden}, estado='en_proceso')}" 
                                        class="btn-action btn-process"
                                        th:if="${o.estado == 'pendiente'}"
-                                       onclick="return confirm('¿Cambiar orden #[[${o.idOrden}]] a En Proceso?');">
+                                       onclick="return confirm('¿Cambiar orden a En Proceso?');">
                                         <i class="fas fa-play"></i>
                                     </a>
                                     <a th:href="@{/ordenes/actualizar-estado/{id}/{estado}(id=${o.idOrden}, estado='completado')}" 
                                        class="btn-action btn-complete"
                                        th:if="${o.estado == 'en_proceso' or o.estado == 'proceso'}"
-                                       onclick="return confirm('¿Marcar orden #[[${o.idOrden}]] como completada?');">
+                                       onclick="return confirm('¿Marcar orden como completada?');">
                                         <i class="fas fa-check"></i>
                                     </a>
                                 </div>

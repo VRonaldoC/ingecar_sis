@@ -418,65 +418,129 @@ select.form-control {
     gap: 0.5rem;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-    .header-container {
-        flex-direction: column;
-        gap: 1rem;
+@media screen and (max-width: 1200px) {
+    .header-container, .container, .footer-container {
+        padding: 0 1.5rem;
     }
     
+    .form-card {
+        max-width: 900px;
+        padding: 1.5rem;
+    }
+    
+    .services-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+}
+
+@media screen and (max-width: 992px) {
     .main-nav {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
+        display: none;
+    }
+    
+    .dashboard-main {
+        padding: 1.5rem;
     }
     
     .page-header {
         flex-direction: column;
+        align-items: flex-start;
         gap: 1rem;
-        text-align: center;
     }
     
-    .services-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .page-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+    }
+    
+    .page-title i {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+    
+    .page-title h2 {
+        font-size: 1.8rem;
+    }
+    
+    .btn-back {
+        align-self: flex-start;
+        padding: 0.8rem 1.5rem;
+    }
+    
+    .form-card {
+        padding: 1.5rem;
+    }
+    
+    .vehicle-summary {
+        padding: 1.2rem;
     }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
+    .header-container {
+        padding: 0 1rem;
+    }
+    
+    .logo-section h1 {
+        font-size: 1.3rem;
+    }
+    
+    .logo-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
     .dashboard-main {
         padding: 1rem;
     }
     
-    .header-container,
-    .container,
-    .footer-container {
-        padding: 0 1rem;
+    .page-title h2 {
+        font-size: 1.6rem;
     }
     
-    .main-nav {
-        gap: 0.3rem;
+    .page-title i {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
     }
     
-    .nav-link {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.9rem;
+    .form-header h3 {
+        font-size: 1.3rem;
     }
     
-    .nav-link span {
-        display: none;
+    .vehicle-summary p {
+        font-size: 1rem;
     }
     
     .services-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .service-item {
+        padding: 0.8rem;
+    }
+    
+    .service-item strong {
+        font-size: 0.95rem;
+    }
+    
+    .service-price {
+        font-size: 1rem;
     }
     
     .form-actions {
         flex-direction: column;
+        gap: 0.8rem;
     }
     
     .btn-save, .btn-cancel {
         width: 100%;
         justify-content: center;
+        padding: 0.9rem;
     }
     
     .footer-container {
@@ -486,65 +550,273 @@ select.form-control {
     }
     
     .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .header-container {
+        flex-direction: column;
+        gap: 0.8rem;
+        padding: 0.8rem;
+    }
+    
+    .logo-section {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .dashboard-main {
+        padding: 0.8rem;
+    }
+    
+    .page-header {
+        text-align: center;
+    }
+    
+    .page-title {
+        align-items: center;
+        text-align: center;
+    }
+    
+    .page-title h2 {
+        font-size: 1.4rem;
+    }
+    
+    .btn-back {
+        align-self: center;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .form-card {
+        padding: 1.2rem;
+    }
+    
+    .vehicle-summary {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .vehicle-plate {
+        font-size: 1rem;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+    
+    .form-label {
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        padding: 0.7rem 0.8rem;
+        font-size: 0.95rem;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        margin-top: 1.5rem;
+        padding-top: 1.2rem;
+    }
+    
+    .btn-save, .btn-cancel {
+        padding: 0.8rem;
+        font-size: 0.95rem;
+    }
+    
+    .footer-container {
+        padding: 1rem 0.8rem;
+    }
+    
+    .footer-links {
         flex-direction: column;
         gap: 0.5rem;
     }
 }
 
-/* Animaciones */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+@media screen and (max-width: 360px) {
+    .logo-section h1 {
+        font-size: 1.2rem;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    
+    .logo-icon {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .page-title h2 {
+        font-size: 1.3rem;
+    }
+    
+    .page-title i {
+        width: 45px;
+        height: 45px;
+        font-size: 1.3rem;
+    }
+    
+    .form-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .vehicle-plate {
+        font-size: 0.9rem;
+    }
+    
+    .form-label {
+        font-size: 0.9rem;
+    }
+    
+    .form-control {
+        padding: 0.6rem 0.7rem;
+        font-size: 0.9rem;
+    }
+    
+    .service-item strong {
+        font-size: 0.9rem;
+    }
+    
+    .service-price {
+        font-size: 0.9rem;
     }
 }
 
-.page-header,
-.form-card {
-    animation: fadeInUp 0.5s ease-out;
-}
-
-/* Efectos de hover mejorados */
-.nav-link i,
-.btn-save,
-.btn-cancel {
-    position: relative;
-    overflow: hidden;
-}
-
-.nav-link i::after,
-.btn-save::after,
-.btn-cancel::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%);
-    transform-origin: 50% 50%;
-}
-
-.nav-link:hover i::after,
-.btn-save:hover::after,
-.btn-cancel:hover::after {
-    animation: ripple 1s ease-out;
-}
-
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 0.5;
+@media (hover: none) and (pointer: coarse) {
+    .nav-link:hover, .btn-back:hover, .btn-save:hover, 
+    .btn-cancel:hover, .service-item:hover {
+        transform: none;
     }
-    100% {
-        transform: scale(20, 20);
-        opacity: 0;
+    
+    .nav-link:active {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-back:active, .btn-save:active, .btn-cancel:active {
+        transform: scale(0.98);
+    }
+    
+    .service-item:active {
+        transform: scale(0.99);
+        border-color: var(--secondary);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .form-card, .vehicle-summary, .service-item {
+        background: var(--primary-dark);
+        color: var(--light);
+    }
+    
+    .form-header h3, .form-label, .vehicle-summary p, .service-item strong {
+        color: var(--light);
+    }
+    
+    .vehicle-summary {
+        background: rgba(52, 152, 219, 0.2);
+        border-left-color: var(--secondary);
+    }
+    
+    .form-control {
+        background: var(--primary);
+        color: var(--white);
+        border-color: var(--gray);
+    }
+    
+    .form-control:focus {
+        border-color: var(--secondary);
+    }
+    
+    .service-item {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .service-item small {
+        color: var(--gray);
+    }
+    
+    .btn-cancel {
+        background: var(--primary);
+        color: var(--light);
+    }
+    
+    .btn-cancel:hover {
+        background: var(--primary-dark);
+    }
+}
+
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    .dashboard-header {
+        position: static;
+    }
+    
+    .dashboard-main {
+        padding: 1rem;
+    }
+    
+    .page-header {
+        flex-direction: row;
+        margin-bottom: 1rem;
+    }
+    
+    .page-title {
+        flex-direction: row;
+        gap: 0.8rem;
+    }
+    
+    .page-title i {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
+    .form-card {
+        padding: 1rem;
+    }
+    
+    .vehicle-summary {
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+    
+    .form-actions {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        flex-direction: row;
+    }
+    
+    .btn-save, .btn-cancel {
+        flex: 1;
+        padding: 0.7rem;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .services-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .form-actions {
+        flex-direction: row;
+    }
+    
+    .btn-save, .btn-cancel {
+        flex: 1;
     }
 }

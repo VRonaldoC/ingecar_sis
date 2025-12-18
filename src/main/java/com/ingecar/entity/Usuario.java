@@ -1,4 +1,5 @@
 package com.ingecar.entity;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ public class Usuario {
     private String nombreUsuario;
     
     @Column(name = "password", nullable = false, length = 255)
-    private String contraseña;
+    private String password;
     
     @Column(name = "nombre_completo", nullable = false, length = 150)
     private String nombreCompleto;
@@ -60,12 +61,12 @@ public class Usuario {
         this.nombreUsuario = nombreUsuario; 
     }
     
-    public String getContraseña() { 
-        return contraseña; 
+    public String getPassword() { 
+        return password; 
     }
 
-    public void setContraseña(String contraseña) { 
-        this.contraseña = contraseña; 
+    public void setPassword(String password) { 
+        this.password = password; 
     }
 
     public String getNombreCompleto() { 

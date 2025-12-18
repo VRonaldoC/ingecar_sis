@@ -178,38 +178,28 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Formatear placa automáticamente con formato peruano
             const placaInput = document.getElementById('placaInput');
             if (placaInput) {
-                // Deshabilitar autocorrección nativo del navegador
                 placaInput.setAttribute('autocomplete', 'off');
                 placaInput.setAttribute('autocorrect', 'off');
                 placaInput.setAttribute('autocapitalize', 'characters');
                 placaInput.setAttribute('spellcheck', 'false');
                 
                 placaInput.addEventListener('input', function(e) {
-                    // Eliminar guiones y espacios, convertir a mayúsculas
                     let value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                    
-                    // Insertar guión automáticamente según el formato
                     if (value.length > 0) {
-                        // Formato especial: O, T, E, R, CD seguido de números
                         if (value.match(/^(O|T|E|R|CD)/i)) {
                             if (value.length > 1) {
-                                // Para placas especiales: O-12345, T-12345, etc.
                                 value = value.substring(0, value.match(/^(O|T|E|R|CD)/i)[0].length) + 
                                         '-' + value.substring(value.match(/^(O|T|E|R|CD)/i)[0].length);
                             }
                         }
-                        // Formato ABC-123 (3 letras + 3 números)
                         else if (value.length > 3 && value.substring(0, 3).match(/^[A-Z]{3}$/)) {
                             value = value.substring(0, 3) + '-' + value.substring(3, 6);
                         }
-                        // Formato AB-1234 (2 letras + 4 números)
                         else if (value.length > 2 && value.substring(0, 2).match(/^[A-Z]{2}$/)) {
                             value = value.substring(0, 2) + '-' + value.substring(2, 6);
                         }
-                        // Formato A-12345 (1 letra + 5 números) - antiguo
                         else if (value.length > 1 && value.substring(0, 1).match(/^[A-Z]$/)) {
                             value = value.substring(0, 1) + '-' + value.substring(1, 6);
                         }
@@ -218,35 +208,25 @@
                     e.target.value = value;
                 });
                 
-                // Prevenir comportamiento por defecto del autocomplete
                 placaInput.addEventListener('keydown', function(e) {
                     if (e.key === 'Tab' || e.key === 'Enter') {
                         this.blur();
                     }
                 });
             }
-            
-            // Deshabilitar autocomplete para todos los inputs
             document.querySelectorAll('input').forEach(input => {
                 input.setAttribute('autocomplete', 'off');
                 input.setAttribute('autocorrect', 'off');
                 input.setAttribute('spellcheck', 'false');
             });
-            
-            // Color preview functionality
             const colorInput = document.getElementById('colorInput');
             const colorPreview = document.getElementById('colorPreview');
             
             if (colorInput && colorPreview) {
-                // Deshabilitar autocomplete para el color
                 colorInput.setAttribute('autocomplete', 'off');
                 colorInput.setAttribute('autocorrect', 'off');
                 colorInput.setAttribute('spellcheck', 'false');
-                
-                // Set initial color
                 updateColorPreview(colorInput.value);
-                
-                // Update on input
                 colorInput.addEventListener('input', function() {
                     updateColorPreview(this.value);
                 });
@@ -257,7 +237,6 @@
                         colorPreview.style.backgroundColor = colorHex;
                         colorPreview.title = colorName + ' - ' + colorHex;
                     } else {
-                        // Intentar detectar si es un código de color
                         if (colorName.match(/^#?[0-9a-f]{6}$/i)) {
                             const hex = colorName.startsWith('#') ? colorName : '#' + colorName;
                             colorPreview.style.backgroundColor = hex;
@@ -297,7 +276,6 @@
                     return colors[cleanName];
                 }
                 
-                // Color picker functionality
                 colorPreview.addEventListener('click', function() {
                     const colors = [
                         {name: 'Rojo', value: 'Rojo'},
@@ -339,7 +317,6 @@
                 });
             }
             
-            // Form validation
             const vehicleForm = document.getElementById('vehicleForm');
             if (vehicleForm) {
                 vehicleForm.addEventListener('submit', function(e) {
@@ -347,7 +324,6 @@
                     const marca = this.querySelector('[name="marca"]').value.trim();
                     const modelo = this.querySelector('[name="modelo"]').value.trim();
                     
-                    // Campos obligatorios
                     if (!plate || !marca || !modelo) {
                         e.preventDefault();
                         alert('Por favor complete los campos obligatorios (*)');
@@ -357,13 +333,8 @@
                     return true;
                 });
             }
-            
-            // Prevenir que el navegador guarde datos del formulario
             document.addEventListener('DOMContentLoaded', function() {
-                // Deshabilitar autocomplete en todo el documento
                 document.body.setAttribute('autocomplete', 'off');
-                
-                // Deshabilitar predicciones de formulario
                 const form = document.getElementById('vehicleForm');
                 if (form) {
                     form.setAttribute('autocomplete', 'off');

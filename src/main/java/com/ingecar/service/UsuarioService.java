@@ -1,4 +1,5 @@
 package com.ingecar.service;
+
 import com.ingecar.entity.Usuario;
 import com.ingecar.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +8,12 @@ import java.util.List;
 
 @Service
 public class UsuarioService {
-    @Autowired private UsuarioRepository usuarioRepository;
+    @Autowired 
+    private UsuarioRepository usuarioRepository;
     
-    public Usuario autenticar(String nombreUsuario, String contraseña) {
+    public Usuario autenticar(String nombreUsuario, String password) {
         Usuario usuario = obtenerPorNombreUsuario(nombreUsuario);
-        if (usuario != null && usuario.getContraseña().equals(contraseña)) {
+        if (usuario != null && usuario.getPassword().equals(password)) {
             return usuario;
         }
         return null;
@@ -38,6 +40,15 @@ public class UsuarioService {
     }
     
     public Usuario guardar(Usuario usuario) {
+        if (usuario.getIdUsuario() != null && 
+            (usuario.getPassword() == null || usuario.getPassword().trim().isEmpty())) {
+            
+            Usuario usuarioExistente = obtenerPorId(usuario.getIdUsuario());
+            if (usuarioExistente != null) {
+                usuario.setPassword(usuarioExistente.getPassword());
+            }
+        }
+        
         return usuarioRepository.save(usuario);
     }
     

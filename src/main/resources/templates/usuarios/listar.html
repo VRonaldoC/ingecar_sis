@@ -50,6 +50,13 @@
 
     <main class="main-content">
         <div class="container">
+            <div th:if="${success}" class="alert alert-success" style="margin: 1rem 0; padding: 1rem; background: #d4edda; color: #155724; border-radius: 5px;">
+                <i class="fas fa-check-circle"></i> [[${success}]]
+            </div>
+            <div th:if="${error}" class="alert alert-error" style="margin: 1rem 0; padding: 1rem; background: #f8d7da; color: #721c24; border-radius: 5px;">
+                <i class="fas fa-exclamation-circle"></i> [[${error}]]
+            </div>
+            
             <div class="page-header">
                 <div class="page-title">
                     <div class="page-icon">
@@ -63,7 +70,6 @@
                 </a>
             </div>
             
-            <!-- Estadísticas -->
             <div class="users-stats">
                 <div class="stat-card total">
                     <i class="fas fa-users stat-icon"></i>
@@ -90,7 +96,6 @@
                 </div>
             </div>
             
-            <!-- Tabla de usuarios -->
             <div class="users-table-container">
                 <div class="table-header">
                     <h3 class="table-title">
@@ -102,10 +107,6 @@
                             <input type="text" class="search-input" placeholder="Buscar usuario...">
                             <i class="fas fa-search search-icon"></i>
                         </div>
-                        <a href="/usuarios/cambiar-password" class="btn btn-sm btn-secondary">
-                            <i class="fas fa-key"></i>
-                            Cambiar Mi Contraseña
-                        </a>
                     </div>
                 </div>
                 
@@ -177,13 +178,8 @@
                                     <a th:href="@{/usuarios/eliminar/{id}(id=${u.idUsuario})}" 
                                        class="btn-action delete" 
                                        title="Eliminar usuario"
-                                       onclick="return confirm('¿Estás seguro de eliminar al usuario [[${u.nombreUsuario}]]?')">
+                                       onclick="return confirm('¿Estás seguro de eliminar al usuario?')">
                                         <i class="fas fa-trash"></i>
-                                    </a>
-                                    <a th:href="@{/usuarios/cambiar-password/{id}(id=${u.idUsuario})}" 
-                                       class="btn-action password" 
-                                       title="Cambiar contraseña">
-                                        <i class="fas fa-key"></i>
                                     </a>
                                 </div>
                             </td>
@@ -217,7 +213,6 @@
     </footer>
 
     <script>
-        // Search functionality
         document.querySelector('.search-input').addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
             const rows = document.querySelectorAll('.table tbody tr');
@@ -227,8 +222,7 @@
                 row.style.display = text.includes(searchTerm) ? '' : 'none';
             });
         });
-        
-        // Confirm delete with custom message
+
         document.querySelectorAll('.btn-action.delete').forEach(button => {
             button.addEventListener('click', function(e) {
                 const userName = this.closest('tr').querySelector('.user-avatar strong').textContent;

@@ -1,4 +1,5 @@
 package com.ingecar.controller;
+
 import com.ingecar.entity.Usuario;
 import com.ingecar.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
@@ -10,12 +11,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
-    @Autowired private UsuarioService usuarioService;
+    @Autowired 
+    private UsuarioService usuarioService;
     
     @GetMapping 
     public String listarUsuarios(Model model, HttpSession session, RedirectAttributes redirectAttributes) {
@@ -44,9 +45,11 @@ public class UsuarioController {
             return redirigirAPaginaAnterior();
         }
         if (usuario.getIdUsuario() == null && usuarioService.existeNombreUsuario(usuario.getNombreUsuario())) {
-            throw new RuntimeException("El nombre de usuario ya existe");
+            redirectAttributes.addFlashAttribute("error", "El nombre de usuario ya existe");
+            return "redirect:/usuarios/nuevo";
         }
         usuarioService.guardar(usuario);
+        redirectAttributes.addFlashAttribute("success", "Usuario guardado correctamente");
         return "redirect:/usuarios";
     }
     
@@ -56,7 +59,10 @@ public class UsuarioController {
             return redirigirAPaginaAnterior();
         }
         Usuario usuario = usuarioService.obtenerPorId(id);
-        if (usuario == null) return "redirect:/usuarios";
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Usuario no encontrado");
+            return "redirect:/usuarios";
+        }
         model.addAttribute("usuario", usuario);
         model.addAttribute("roles", Usuario.Rol.values());
         return "usuarios/form";
@@ -73,35 +79,8 @@ public class UsuarioController {
             return "redirect:/usuarios";
         }
         usuarioService.eliminar(id);
+        redirectAttributes.addFlashAttribute("success", "Usuario eliminado correctamente");
         return "redirect:/usuarios";
-    }
-    
-    @GetMapping("/cambiar-password") 
-    public String cambiarPasswordForm(Model model, HttpSession session) {
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null) return "redirect:/auth/login";
-        model.addAttribute("usuario", usuario);
-        return "usuarios/cambiar-password";
-    }
-    
-    @PostMapping("/cambiar-password") 
-    public String cambiarPassword(@RequestParam String passwordActual,
-                                 @RequestParam String passwordNueva, @RequestParam String passwordConfirmar,
-                                 HttpSession session, Model model) {
-        Usuario usuario = (Usuario) session.getAttribute("usuario");
-        if (usuario == null) return "redirect:/auth/login";
-        if (!usuario.getContraseña().equals(passwordActual)) {
-            model.addAttribute("error", "Contraseña actual incorrecta");
-            return "usuarios/cambiar-password";
-        }
-        if (!passwordNueva.equals(passwordConfirmar)) {
-            model.addAttribute("error", "Las nuevas contraseñas no coinciden");
-            return "usuarios/cambiar-password";
-        }
-        usuario.setContraseña(passwordNueva);
-        usuarioService.guardar(usuario);
-        model.addAttribute("success", "Contraseña actualizada correctamente");
-        return "usuarios/cambiar-password";
     }
     
     private boolean esAdministrador(HttpSession session, RedirectAttributes redirectAttributes) {
