@@ -62,35 +62,39 @@
                     </a>
                 </div>
             </div>
-            <!-- Panel de búsqueda SIMPLIFICADO -->
-            <div class="search-panel">
-                <div class="search-box" style="width:100%;">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Buscar clientes por DNI, nombre o teléfono...">
-                </div>
-            </div>
 
-            <!-- Tabla de clientes -->
+            <!-- Tabla de clientes - ESTRUCTURA IGUAL a órdenes -->
             <div class="table-container">
+                <div class="table-header">
+                    <h3><i class="fas fa-list"></i> Lista de Clientes</h3>
+                    <div class="table-tools">
+                        <div class="search-box">
+                            <input type="text" class="search-input" id="searchInput" placeholder="Buscar clientes...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CONTENEDOR CON SCROLL RESPONSIVO - IGUAL a órdenes -->
                 <div class="table-responsive">
-                    <table class="clients-table">
+                    <table class="orders-table">
                         <thead>
                             <tr>
-                                <th><i class="fas fa-hashtag"></i> ID</th>
-                                <th><i class="fas fa-id-badge"></i> DNI</th>
-                                <th><i class="fas fa-user"></i> Nombre</th>
-                                <th><i class="fas fa-phone"></i> Teléfono</th>
-                                <th><i class="fas fa-envelope"></i> Email</th>
-                                <th><i class="fas fa-toggle-on"></i> Estado</th>
-                                <th><i class="fas fa-cogs"></i> Acciones</th>
+                                <th>ID</th>
+                                <th>DNI</th>
+                                <th>Cliente</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="c : ${clientes}" class="client-row">
-                                <td class="client-id">#[[${c.idCliente}]]</td>
+                                <td>#[[${c.idCliente}]]</td>
                                 <td class="client-dni">[[${c.dni}]]</td>
-                                <td class="client-name">
-                                    <div class="name-wrapper">
+                                <td class="client-info">
+                                    <div class="client-name">
                                         <div class="client-avatar-small">
                                             <i class="fas fa-user"></i>
                                         </div>
@@ -102,38 +106,38 @@
                                 </td>
                                 <td class="client-phone">[[${c.telefono}]]</td>
                                 <td class="client-email">[[${c.email}]]</td>
-                                    <td class="client-status">
-                                        <span th:class="${#strings.toLowerCase(c.estado) == 'activo'} ? 'status-active' : 'status-inactive'">
-                                            <i class="fas fa-check-circle" th:if="${#strings.toLowerCase(c.estado) == 'activo'}"></i>
-                                            <i class="fas fa-times-circle" th:unless="${#strings.toLowerCase(c.estado) == 'activo'}"></i>
-                                            [[${c.estado}]]
-                                        </span>
-                                    </td>
-                                <td class="client-actions">
-                                    <div class="actions-group">
-                                        <a th:href="@{/clientes/detalle/{dni}(dni=${c.dni})}" class="btn-action detail-btn">
+                                <td>
+                                    <span th:class="${#strings.toLowerCase(c.estado) == 'activo'} ? 'status status-active' : 'status status-inactive'">
+                                        <i class="fas fa-check-circle" th:if="${#strings.toLowerCase(c.estado) == 'activo'}"></i>
+                                        <i class="fas fa-times-circle" th:unless="${#strings.toLowerCase(c.estado) == 'activo'}"></i>
+                                        [[${#strings.toLowerCase(c.estado) == 'activo' ? 'Activo' : 'Inactivo'}]]
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="actions">
+                                        <a th:href="@{/clientes/detalle/{dni}(dni=${c.dni})}" class="btn-action btn-view">
                                             <i class="fas fa-eye"></i>
                                             <span>Ver</span>
                                         </a>
-                                        <a th:href="@{/clientes/editar/{id}(id=${c.idCliente})}" class="btn-action edit-btn">
+                                        <a th:href="@{/clientes/editar/{id}(id=${c.idCliente})}" class="btn-action btn-edit">
                                             <i class="fas fa-edit"></i>
                                             <span>Editar</span>
                                         </a>
                                         <a th:href="@{/clientes/eliminar/{id}(id=${c.idCliente})}" 
-                                           class="btn-action delete-btn"
+                                           class="btn-action btn-delete"
                                            onclick="return confirm('¿Está seguro de eliminar este cliente?');">
-                                            <i class="fas fa-trash-alt"></i>
+                                            <i class="fas fa-trash"></i>
                                             <span>Eliminar</span>
                                         </a>
                                     </div>
                                 </td>
                             </tr>
-                            <tr th:if="${clientes.empty}" class="no-data-row">
+                            <tr th:if="${clientes.empty}">
                                 <td colspan="7">
                                     <div class="empty-state">
                                         <i class="fas fa-users"></i>
-                                        <h3>No hay clientes registrados</h3>
-                                        <p>Comience agregando un nuevo cliente al sistema</p>
+                                        <h4>No hay clientes registrados</h4>
+                                        <p>Comienza agregando un nuevo cliente al sistema.</p>
                                         <a href="/clientes/nuevo" class="btn-empty">
                                             <i class="fas fa-user-plus"></i>
                                             Agregar Primer Cliente
@@ -144,6 +148,7 @@
                         </tbody>
                     </table>
                 </div>
+                <!-- FIN CONTENEDOR SCROLL -->
             </div>
         </div>
     </main>
@@ -159,36 +164,35 @@
     </footer>
 
     <script>
-        // Búsqueda SIMPLIFICADA en tiempo real
+        // Búsqueda en tiempo real - Adaptado para clientes
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             const clientRows = document.querySelectorAll('.client-row');
-
+            
             function filterClients() {
                 const searchTerm = searchInput.value.toLowerCase();
-
+                
                 clientRows.forEach(row => {
                     const dni = row.querySelector('.client-dni').textContent.toLowerCase();
-                    const name = row.querySelector('.client-name strong').textContent.toLowerCase();
+                    const name = row.querySelector('.client-info strong').textContent.toLowerCase();
                     const phone = row.querySelector('.client-phone').textContent.toLowerCase();
+                    const email = row.querySelector('.client-email').textContent.toLowerCase();
                     
                     const matchesSearch = dni.includes(searchTerm) || 
                                          name.includes(searchTerm) || 
-                                         phone.includes(searchTerm);
+                                         phone.includes(searchTerm) ||
+                                         email.includes(searchTerm);
                     
-                    if (matchesSearch || searchTerm === '') {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
+                    row.style.display = matchesSearch ? '' : 'none';
                 });
             }
-
+            
             searchInput.addEventListener('input', filterClients);
-
+            
             // Animación de entrada para filas
             clientRows.forEach((row, index) => {
                 row.style.animationDelay = `${index * 0.05}s`;
+                row.style.animation = 'fadeInUp 0.3s ease-out forwards';
             });
         });
     </script>
